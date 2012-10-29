@@ -1,0 +1,4 @@
+*.pyc
+jubatest.egg-info
+dist
+build
