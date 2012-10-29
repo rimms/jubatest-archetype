@@ -1,5 +1,8 @@
 import sys
+import traceback
 from argparse import ArgumentParser
+from jubatest.version import get_version
+from jubatest.runner import execute
 
 def parse_options():
     parser = ArgumentParser()
@@ -12,13 +15,15 @@ def parse_options():
       metavar  = 'FILES',
       dest     = 'configfiles'
     )
+    parser.add_argument(
+      '-v',
+      '--version',
+      action   = 'version',
+      version  = '%(prog)s ' + get_version()
+    )
     return parser.parse_args()
 
 def main():
-    try:
-      arguments = parse_options()
-      for configfile in arguments.configfiles:
-        print configfile
-    except:
-      sys.exit(1)
-    sys.exit(0)
+    arguments = parse_options()
+    for configfile in arguments.configfiles:
+        execute(configfile)
