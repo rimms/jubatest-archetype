@@ -1,8 +1,16 @@
-= Jubatest
+Jubatest
+========
 
 A test tool for distributed enviropment.
 
-== Functions
+How to Use
+----------
+
+  $ python setup.py sdist install
+  $ jubatest -f FILE
+
+Functions
+---------
 
 * Remote process control and monitoring
   * start
