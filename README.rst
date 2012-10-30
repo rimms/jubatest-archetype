@@ -8,7 +8,7 @@ How to Use
 
 ::
 
-  $ python setup.py sdist install
+  $ python setup.py install
   $ jubatest -f FILE
 
 

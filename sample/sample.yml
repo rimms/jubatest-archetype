@@ -1,0 +1,12 @@
+---
+  type    : command
+  command : echo test
+  host    : localhost
+---
+  type    : test
+  command : echo test
+  expect  : test
+---
+  type    : test
+  command : echo test
+  host    : localhost

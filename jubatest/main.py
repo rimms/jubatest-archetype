@@ -1,8 +1,8 @@
 import sys
-import traceback
 from argparse import ArgumentParser
 from jubatest.version import get_version
-from jubatest.runner import execute
+from jubatest.runner import Runner
+from jubatest.util import is_readable
 
 def parse_options():
     parser = ArgumentParser()
@@ -26,4 +26,10 @@ def parse_options():
 def main():
     arguments = parse_options()
     for configfile in arguments.configfiles:
-        execute(configfile)
+        try:
+           is_readable(configfile)
+           runner = Runner(configfile)
+           runner.execute()
+           runner.print_details()
+        except IOError as ioe:
+           print ioe
