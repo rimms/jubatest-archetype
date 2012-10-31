@@ -1,22 +1,23 @@
 import yaml
+import inspect
 
-from jubatest.client.command import LocalClient
+from jubatest.client import command
 
-class Runner:
+class Operator:
 
   def __init__(self, configfile):
     self.configfile = configfile
     self.results = {}
 
-  def execute(self):
+  def run(self):
     with open(self.configfile, 'r') as config:
       for index, data in enumerate(yaml.load_all(config)):
-        getattr(self, data['type'])(index, data)
+        getattr(self, data['action'])(index, data)
 
   def command(self, index, data):
-    client = LocalClient()
-    client.execute(data['command'])
-    self.results[index] = True
+    client = command.Client()
+    result = client.execute(data['host'], data['command'])
+    self.results[index] = not result.failed
 
   def test(self, index, data):
     self.results[index] = True

@@ -2,32 +2,41 @@ import ssh
 import subprocess
 import traceback
 
-class CommandClient:
-
-  """
-  TODO: switch client
-         remotehost -> RemoteClient
-         localhost  -> LocalClient
-  """
-
-class RemoteClient:
+class Client:
 
   def execute(self, host, command):
+    return self.__local(command)
+
+  def __remote(self, host, command):
     client = ssh.SSHClient()
-    client.load_system_host_keys()
+    if not env.disable_known_hosts:
+      client.load_system_host_keys()
     client.connect(host)
     stdin, stdout, stderr = client.exec_command(command)
     for line in stdout.read().split('\n'):
       print line
     client.close()
 
-class LocalClient:
+  def __local(self, command):
+    command_args = str(command).split()
+    stdout_stream = subprocess.PIPE
+    stderr_stream = subprocess.PIPE
 
-  def execute(self, command):
-    stdout = None
-    try:
-      stdout = subprocess.check_output(command.split(), shell=False, stderr=subprocess.STDOUT)
-      print stdout
-    except subprocess.CalledProcessError as e:
-      traceback.format_exc()
+    proc = subprocess.Popen(
+      command_args,
+      shell = True,
+      stdout = stdout_stream,
+      stderr = stderr_stream
+    )
+    (stdout, stderr) = proc.communicate()
 
+    result = _Result()
+    result.ret = proc.returncode
+    result.stdout = stdout.strip() if stdout else ""
+    result.stderr = stderr.strip() if stderr else ""
+    result.failed = True if result.ret else False
+
+    return result
+
+class _Result(str):
+    pass

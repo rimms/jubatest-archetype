@@ -1,12 +1,14 @@
 ---
-  type    : command
-  command : echo test
-  host    : localhost
+action    : command
+command   : "ls -lF"
+host      : localhost
 ---
-  type    : test
-  command : echo test
-  expect  : test
----
-  type    : test
-  command : echo test
+action    : test
+actual    :
+  command : echo host
   host    : localhost
+expected  : test
+---
+action    : command
+command   : "/bin/echo test"
+host      : localhost
