@@ -1,7 +1,6 @@
 ---
 action    : command
 command   : "ls -lF"
-host      : localhost
 ---
 action    : test
 actual    :
@@ -10,5 +9,5 @@ actual    :
 expected  : test
 ---
 action    : command
-command   : "/bin/echo test"
+command   : "ls -F"
 host      : localhost

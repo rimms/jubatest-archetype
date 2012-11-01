@@ -27,7 +27,10 @@ def parse_options():
 def main():
   arguments = parse_options()
   for configfile in arguments.configfiles:
-    is_readable(configfile)
-    operator = Operator(configfile)
-    operator.run()
-    operator.print_details()
+    try:
+      is_readable(configfile)
+      operator = Operator(configfile)
+      operator.run()
+      operator.print_details()
+    except IOError as ioe:
+      print ioe

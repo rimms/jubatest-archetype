@@ -1,13 +1,15 @@
 import yaml
 import inspect
 
-from jubatest.client import command
+from jubatest.client.command import CommandClient
 
 class Operator:
 
   def __init__(self, configfile):
     self.configfile = configfile
     self.results = {}
+    self.stdouts = {}
+    self.stderrs = {}
 
   def run(self):
     with open(self.configfile, 'r') as config:
@@ -15,9 +17,11 @@ class Operator:
         getattr(self, data['action'])(index, data)
 
   def command(self, index, data):
-    client = command.Client()
-    result = client.execute(data['host'], data['command'])
+    client = CommandClient()
+    result = client.execute(data)
     self.results[index] = not result.failed
+    self.stdouts[index] = result.stdout
+    self.stderrs[index] = result.stderr
 
   def test(self, index, data):
     self.results[index] = True
@@ -26,4 +30,10 @@ class Operator:
     print 'file:', self.configfile
     print 'result:'
     for index in sorted(self.results.keys()):
-      print ' ', index + 1, ':', self.results[index]
+      print index + 1, ':', self.results[index]
+      stdout = self.stdouts[index] if self.stdouts.has_key(index) else ""
+      stderr = self.stderrs[index] if self.stderrs.has_key(index) else ""
+      if len(stdout) != 0:
+        print '[stdout]\n', stdout
+      if len(stderr) != 0:
+        print '[stderr]\n', stderr
