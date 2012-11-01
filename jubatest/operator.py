@@ -26,14 +26,13 @@ class Operator:
   def test(self, index, data):
     self.results[index] = True
 
-  def print_details(self):
-    print 'file:', self.configfile
-    print 'result:'
+  def dump(self, outfile):
+    ret = []
     for index in sorted(self.results.keys()):
-      print index + 1, ':', self.results[index]
-      stdout = self.stdouts[index] if self.stdouts.has_key(index) else ""
-      stderr = self.stderrs[index] if self.stderrs.has_key(index) else ""
-      if len(stdout) != 0:
-        print '[stdout]\n', stdout
-      if len(stderr) != 0:
-        print '[stderr]\n', stderr
+      data = {}
+      data['result'] = self.results[index]
+      data['stdout'] = self.stdouts[index] if self.stdouts.has_key(index) else ""
+      data['stderr'] = self.stderrs[index] if self.stderrs.has_key(index) else ""
+      ret.append(data)
+    with open(outfile, 'w') as out:
+      yaml.dump_all(ret, stream=out, default_flow_style=False)
