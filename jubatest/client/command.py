@@ -13,9 +13,7 @@ class CommandClient:
       return self.__local(data)
 
   def __remote(self, data):
-    """
-     TODO: multiple hosts
-    """
+    # TODO: multiple hosts
     host = data['host']
     command_args = data['command']
     client = ssh.SSHClient()
@@ -23,6 +21,7 @@ class CommandClient:
     client.set_missing_host_key_policy(ssh.AutoAddPolicy())
 
     connected = False
+    # TODO: cache password
     password = None
     tried = 0
     while not connected:
@@ -30,23 +29,23 @@ class CommandClient:
         tried += 1
         client.connect(host, password=password)
         connected = True
-      except ssh.PasswordRequiredException:
-        # retry 3 times
+      except (ssh.PasswordRequiredException, ssh.AuthenticationException):
         if tried <= 3:
           import getpass
           prompt = 'password for %s: ' % (host)
           password = getpass.getpass(prompt)
           continue
         else:
-          raise NetworkError()
+          raise
       except:
-        raise NetworkError()
+        raise
 
     (stdin, stdout, stderr) = client.exec_command(command_args)
 
     result = Result()
-    result.stdout = stdout.read().strip()
-    result.stderr = stderr.read().strip()
+    result.stdout = stdout.read().strip().split('\n') if stdout else None
+    result.stderr = stderr.read().strip().split('\n') if stderr else None
+    # TODO: check return code
     result.failed = True if len(result.stderr) != 0 else False
 
     client.close()
@@ -67,8 +66,8 @@ class CommandClient:
     (stdout, stderr) = proc.communicate()
 
     result = Result()
-    result.stdout = stdout.strip() if stdout else ""
-    result.stderr = stderr.strip() if stderr else ""
-    result.failed = True if len(result.stderr) != 0 else False
+    result.stdout = stdout.strip().split('\n') if stdout else None
+    result.stderr = stderr.strip().split('\n') if stderr else None
+    result.succeeded = False if proc.returncode else True
 
     return result

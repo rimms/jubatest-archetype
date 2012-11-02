@@ -8,8 +8,6 @@ class Operator:
   def __init__(self, configfile):
     self.configfile = configfile
     self.results = {}
-    self.stdouts = {}
-    self.stderrs = {}
 
   def run(self):
     with open(self.configfile, 'r') as config:
@@ -18,10 +16,7 @@ class Operator:
 
   def command(self, index, data):
     client = CommandClient()
-    result = client.execute(data)
-    self.results[index] = not result.failed
-    self.stdouts[index] = result.stdout
-    self.stderrs[index] = result.stderr
+    self.results[index] = client.execute(data)
 
   def test(self, index, data):
     self.results[index] = True
@@ -30,9 +25,8 @@ class Operator:
     ret = []
     for index in sorted(self.results.keys()):
       data = {}
+      data['index'] = index + 1
       data['result'] = self.results[index]
-      data['stdout'] = self.stdouts[index] if self.stdouts.has_key(index) else ""
-      data['stderr'] = self.stderrs[index] if self.stderrs.has_key(index) else ""
       ret.append(data)
     with open(outfile, 'w') as out:
-      yaml.dump_all(ret, stream=out, default_flow_style=False)
+      yaml.dump_all(ret, stream=out, allow_unicode = True, default_flow_style=False)
