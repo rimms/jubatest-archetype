@@ -11,7 +11,7 @@ How to Use
   $ git clone https://github.com/rimms/jubatest.git
   $ cd jubatest
   $ python setup.py install
-  $ jubatest -o sample/sample.yml
+  $ jubatest -c sample/sample.yml
   $ view result-sample.yml
 
 Functions
