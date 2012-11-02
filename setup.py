@@ -12,7 +12,7 @@ setup(
     packages         = find_packages(),
     install_requires = [
         'pyyaml',
-        'fabric',
+        'ssh',
     ],
     entry_points     = {
         'console_scripts': [

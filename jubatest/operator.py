@@ -2,6 +2,7 @@ import yaml
 import inspect
 
 from jubatest.client.command import CommandClient
+from jubatest.tester import Tester
 
 class Operator:
 
@@ -19,7 +20,8 @@ class Operator:
     self.results[index] = client.execute(data)
 
   def test(self, index, data):
-    self.results[index] = True
+    tester = Tester()
+    self.results[index] = tester.run(data)
 
   def dump(self, outfile):
     ret = []

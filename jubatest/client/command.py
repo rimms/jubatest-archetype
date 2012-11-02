@@ -1,6 +1,5 @@
 import ssh
 import subprocess
-import traceback
 
 from jubatest.result import Result
 

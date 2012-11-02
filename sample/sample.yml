@@ -1,12 +1,12 @@
 ---
 action    : command
-command   : "ls -lF"
+command   : "ls -F"
 ---
 action    : test
-actual    :
-  command : echo host
-  host    : localhost
-expected  : test
+command   : "echo test"
+host      : localhost
+expected  :
+  - test
 ---
 action    : command
 command   : "ls -F"
