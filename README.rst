@@ -8,8 +8,11 @@ How to Use
 
 ::
 
+  $ git clone https://github.com/rimms/jubatest.git
+  $ cd jubatest
   $ python setup.py install
-  $ jubatest -f FILE
+  $ jubatest -o sample/sample.yml
+  $ view result-sample.yml
 
 Functions
 ---------
