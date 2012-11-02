@@ -11,9 +11,18 @@ How to Use
   $ python setup.py install
   $ jubatest -f FILE
 
-
 Functions
 ---------
+
+* Run command
+    * localhost
+    * remote (via SSH)
+
+* Assertion
+    * stdout
+
+TBD
+---
 
 * Remote process control and monitoring
     * start
