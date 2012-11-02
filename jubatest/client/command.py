@@ -45,7 +45,7 @@ class CommandClient:
     result.stdout = stdout.read().strip().split('\n') if stdout else None
     result.stderr = stderr.read().strip().split('\n') if stderr else None
     # TODO: check return code
-    result.failed = True if len(result.stderr) != 0 else False
+    result.succeeded = True if len(result.stderr) != 0 else False
 
     client.close()
 
